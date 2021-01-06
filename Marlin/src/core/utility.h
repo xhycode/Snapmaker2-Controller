@@ -23,7 +23,7 @@
 
 #include "../inc/MarlinConfigPre.h"
 
-constexpr char axis_codes[XYZE] = { 'X', 'Y', 'Z', 'E' };
+constexpr char axis_codes[X_TO_E] = { 'X', 'Y', 'Z', 'B', 'E' };
 
 // Delay that ensures heaters and watchdog are kept alive
 void safe_delay(millis_t ms);
