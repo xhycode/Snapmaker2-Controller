@@ -1646,6 +1646,9 @@ ErrCode SystemService::SendStatus(SSTP_Event_t &event) {
   tmp_i32 = (int32_t) (NATIVE_TO_LOGICAL(current_position[B_AXIS], B_AXIS) * 1000);
   WORD_TO_PDU_BYTES_INDEX_MOVE(buff, tmp_i32, i);
 
+  tmp_i32 = (int32_t) (NATIVE_TO_LOGICAL(current_position[B_AXIS], B_AXIS) * 1000);
+  WORD_TO_PDU_BYTES_INDEX_MOVE(buff, tmp_i32, i);
+
   // system status
   sta.system_state = (uint8_t)systemservice.MapCurrentStatusForSC();
 
