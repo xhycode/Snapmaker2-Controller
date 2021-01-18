@@ -884,6 +884,7 @@ private:
   static void M1028();
 
   static void M1010();
+  static void M1011();
 
   static void M1999();
 
