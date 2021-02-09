@@ -72,7 +72,8 @@ class Linear: public ModuleBase  {
     ErrCode GetLength(SSTP_Event_t &event) { return GetLengthOrLead(event, MODULE_EXT_CMD_LINEAR_LENGTH_REQ); }
     ErrCode SetLead(SSTP_Event_t &event) { return SetLengthOrLead(event, MODULE_EXT_CMD_LINEAR_LEAD_REQ); }
     ErrCode GetLead(SSTP_Event_t &event) { return GetLengthOrLead(event, MODULE_EXT_CMD_LINEAR_LEAD_REQ); }
-
+    void SetAllLength(uint32_t len);
+    void GetAllLength();
     uint16_t length(LinearAxisType axis) {
       if (axis < LINEAR_AXIS_MAX)
         return length_[axis];
@@ -105,7 +106,6 @@ class Linear: public ModuleBase  {
 
     ErrCode SetLengthOrLead(SSTP_Event_t &event, uint8_t ext_cmd);
     ErrCode GetLengthOrLead(SSTP_Event_t &event, uint8_t ext_cmd);
-
   private:
     uint8_t       mac_index_[LINEAR_AXIS_MAX];
     uint16_t      length_[LINEAR_AXIS_MAX];

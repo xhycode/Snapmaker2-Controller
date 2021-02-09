@@ -468,6 +468,57 @@ error:
   return hmi.Send(event);
 }
 
+void Linear::GetAllLength() {
+  int i;
+
+  CanExtCmd_t cmd;
+  uint8_t     can_buffer[8];
+  uint32_t len = 0;
+
+  cmd.data = can_buffer;
+
+  for(i = 0; i < LINEAR_AXIS_MAX; i++) {
+    if (mac_index_[i] == MODULE_MAC_INDEX_INVALID)
+      continue;
+
+    cmd.data[0] = 0xf;
+    cmd.data[1] = 0;
+    cmd.length  = 2;
+    cmd.mac.val = canhost.mac(mac_index_[i]);
+
+    if (canhost.SendExtCmdSync(cmd, 500) != E_SUCCESS)
+      continue;
+
+    // length of this linear
+    len = (cmd.data[2] << 24) | (cmd.data[3] << 16) | (cmd.data[4] << 8) | cmd.data[5];
+    LOG_I("Module 0x%08X len:%d\n", cmd.mac.bits.id, len / 1000);
+  }
+}
+
+void Linear::SetAllLength(uint32_t len) {
+  CanExtCmd_t cmd;
+  uint8_t     buffer[8];
+
+  int      i;
+  len *= 1000;
+  cmd.data    = buffer;
+  cmd.data[0] = 0xf;
+  cmd.data[1] = 1;
+  cmd.data[2] = len >> 24;
+  cmd.data[3] = len >> 16;
+  cmd.data[4] = len >>8;
+  cmd.data[5] = len;
+  cmd.length = 6;
+
+  for (i = 0; i < LINEAR_AXIS_MAX; i++) {
+    if (mac_index_[i] != MODULE_MAC_INDEX_INVALID) {
+      cmd.mac.val = canhost.mac(mac_index_[i]);
+      LOG_I("Set Module 0x%08X len:%d\n", cmd.mac.bits.id, len);
+      canhost.SendExtCmd(cmd);
+    }
+  }
+  GetAllLength();
+}
 
 ErrCode Linear::GetLengthOrLead(SSTP_Event_t &event, uint8_t ext_cmd) {
   int i, j = 0;

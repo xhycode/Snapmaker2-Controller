@@ -34,8 +34,19 @@
 #include "src/module/motion.h"
 #include "src/libs/hex_print_routines.h"
 
+
 void GcodeSuite::M1005() {
   MAC_t       mac;
+  if (parser.seen('L')) {
+    linear.SetAllLength(356);
+    return;
+  } else if (parser.seen('M')) {
+    linear.SetAllLength(256);
+    return;
+  } else if (parser.seen('S')) {
+    linear.SetAllLength(165);
+    return;
+  }
 
   char buffer[VERSION_STRING_SIZE + 4];
   int  i;
